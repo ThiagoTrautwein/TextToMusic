@@ -1,13 +1,27 @@
-
-
+from unidecode import unidecode
+from errors import NoteNameError
 class Note:
+    notes = {
+        "do":"C",
+        "fa":"F",
+        "la":"A",
+        "mi":"E",
+        "re":"D",
+        "si":"B",
+        "sol":"G"
+    }
     frequency_default = 500
 
     def __init__(self, name):
         self.frequency = self.frequency_default
-        self.name = name
+        self.name = self.ProcessNoteName(name)
 
-
+    def ProcessNoteName(self,name):
+        name = unidecode(name.lower())
+        if name in self.notes:
+            return self.notes[name]
+        raise NoteNameError("Nome da nota inválido")
+        
     def GetNote (self):
         return self.frequency
 

@@ -1,5 +1,3 @@
-
-
 class Instrument:
     code_midi_default = 1
 

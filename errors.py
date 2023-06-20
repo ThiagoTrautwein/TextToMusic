@@ -1,0 +1,2 @@
+class NoteNameError(Exception):
+    pass
