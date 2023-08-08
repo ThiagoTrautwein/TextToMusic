@@ -1,7 +1,9 @@
-from note import Note
-from instrument import Instrument
+from text import Text
 
-note = Note('thiago')
-note.GetNote()
-instrument = Instrument()
+
+print("digite um texto de entrada:\n")
+texto_entrada = input()    
+texto = Text(texto_entrada)
+texto.PercorreTexto()
+
 
