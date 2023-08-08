@@ -45,7 +45,6 @@ class Note:
         time.sleep(0.1)
 
     def ChangeNote(self, caractere, out):
-        #print(caractere)
         match caractere:
             case 'A' | 'a':
                 self.SetNote(33, out)
@@ -66,6 +65,11 @@ class Note:
     def RaiseOctave (self, out):
         self.SilenceNote(out)
         self.note = self.GetNote() + 12
+        self.PlayNote(out)
+
+    def LowerOctave (self, out):
+        self.SilenceNote(out)
+        self.note = self.GetNote() - 12
         self.PlayNote(out)
 
     def DefaultOctave (self, out):
