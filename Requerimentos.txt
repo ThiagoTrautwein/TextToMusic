@@ -1,3 +1,9 @@
 pip install pyhton-rtmidi
 
+
 IDE com compilador C++ para usar a API/biblioteca rtmidi
+
+
+
+
+pip install MIDIutil
