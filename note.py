@@ -3,8 +3,8 @@ import time
 class Note:
     ## valor da nota em inteiro
     ## Range: 0-127
-    note_default = 36
     velocity_default = 100
+    octave_default = 3
     C = [0,12,24,36,48,60,72,84,96,108,120]
     # Csharp = [1,13,25,37,49,61,73,85,97,109,121]
     D = [2,14,26,38,50,62,74,86,98,110,122]
@@ -18,60 +18,80 @@ class Note:
     # Asharp = [10,22,34,46,58,70,82,94,106,118]
     B = [11,23,35,47,59,71,83,95,107,119]
 
-    def __init__(self, nota, out):
-        self.note = nota
+
+    def __init__(self, out):
+        # nota de 0 a 11
+        self.note = 0
         self.velocity = 100
+        # oitava de 0 a 9
+        self.octave = self.octave_default
         self.PlayNote(out)
         
     def GetNote (self):
         return self.note
+
+    def GetOctave(self):
+        return self.octave
 
     def SetNote (self, note, out):
         self.SilenceNote(out)
         self.note = note
         self.PlayNote(out)
 
+    def SetOctave (self, octave):
+        self.octave = octave
+
     def SetVelocity (self, velocity):
         self.velocity = velocity
 
     def PlayNote(self, out):
         # src = 0x94 = note on
-        out.send_message([0x94, self.GetNote(), self.velocity])
+        note = self.GetNote() + self.GetOctave() * 12
+        out.send_message([0x94, note, self.velocity])
         time.sleep(1.0)
 
     def SilenceNote(self, out):
         # src = 0x84 = note off
-        out.send_message([0x84, self.GetNote(), 0])
+        note = self.GetNote() + self.GetOctave() * 12
+        out.send_message([0x84, note, 0])
         time.sleep(0.1)
 
     def ChangeNote(self, caractere, out):
-        #print(caractere)
         match caractere:
             case 'A' | 'a':
-                self.SetNote(33, out)
+                note = self.A[self.GetOctave()]
             case 'B' | 'b':
-                self.SetNote(35, out)
+                note = self.B[self.GetOctave()]
             case 'C' | 'c':
-                self.SetNote(36, out)
+                note = self.C[self.GetOctave()]
             case 'D' | 'd':
-                self.SetNote(38, out)
+                note = self.D[self.GetOctave()]
             case 'E' | 'e':
-                self.SetNote(40, out)
+                note = self.E[self.GetOctave()]
             case 'F' | 'f':
-                self.SetNote(41, out)
+                note = self.F[self.GetOctave()]
             case 'G' | 'g':
-                self.SetNote(43, out)
-            
+                note = self.G[self.GetOctave()]
+        self.SetNote(note, out)            
 
     def RaiseOctave (self, out):
         self.SilenceNote(out)
-        self.note = self.GetNote() + 12
+        if self.GetOctave() == 10:
+            self.DefaultOctave()
+        else:
+            self.SetOctave(self.GetOctave() + 1)
         self.PlayNote(out)
 
-    def DefaultOctave (self, out):
+    def LowerOctave (self, out):
         self.SilenceNote(out)
-        self.note = self.note_default
+        if self.GetOctave() == 0:
+            self.DefaultOctave()
+        else:
+            self.SetOctave(self.GetOctave() - 1)
         self.PlayNote(out)
+
+    def DefaultOctave (self):
+        self.SetOctave(self.octave_default)
 
     def RepeatNote(self, out):
         self.SetNote(self.note, out)

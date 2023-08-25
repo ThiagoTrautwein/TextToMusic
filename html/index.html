@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trabalho Final</title>
+    <link rel="stylesheet" href="reset.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+    <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
+    <script defer src="https://pyscript.net/latest/pyscript.js"></script>
+</head>
+<body class="container">
+
+    <py-script src="\TRABALHO FINAL\text.py">
+        import text as text
+    </py-script>
+
+    <header>
+        <div class="header__titulo">
+            <h1>GERADOR DE MÚSICA A PARTIR DE TEXTO</h1>
+        </div>
+    </header>
+    <main>
+        <section class="main__primeira-linha">
+            <div class="instrumento">
+                <h3>Instrumento</h3>
+                <h4>
+                    <py-script>
+                        print("nome do instrumento")              
+                    </py-script>
+                </h4>
+            </div>
+            <div>
+                <img src="galeria/oitava_piano.webp">
+            </div>
+        </section>
+        <section class="main__segunda-linha">
+            <div class="input-texto">
+                <label for="texto-de-entrada" style="color:#D9D9D9; margin-bottom: 5px;">Crie sua música!</label>
+                <textarea id="texto-de-entrada" name="texto-de-entrada" rows="20" cols="30" placeholder="Digite aqui"></textarea>
+                <button class="submeter-texto" onclick="SalvaTexto()">Submeter</button>
+                <script>
+                    function SalvaTexto(){
+                        console.log( ${pyscript.interpreter.globals.get('textarea')})
+                    }
+                </script>
+
+            </div>
+            <div class="display_volume">
+                <h1>VOLUME</h1>
+                <div class="controle_barra-de-volume">
+                    <div class="volume">
+                        <span>50%</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="main_terceira-linha">
+            <div class="controle-da-música">
+                <button>
+                    <img src="galeria/botao_resume.png">
+                </button>
+                <button>
+                    <img src="galeria/botao_pause.png">
+                </button> 
+                <div class="controle_barra-de-progresso">
+                    <div class="tempo-de-duração">
+                        <span>86%</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

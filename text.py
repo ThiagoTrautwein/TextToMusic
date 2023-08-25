@@ -1,5 +1,9 @@
 from random import random
-from music_controler import MusicControler
+import rtmidi
+from midiutil import MIDIFile
+from note import Note
+from instrument import Instrument
+from music_controler import VolumeControler
 
 class Text:
         
@@ -8,10 +12,13 @@ class Text:
         self.char = ''
         self.notes = ['A','B','C','D','E','F','G']
         self.text_lenght = 0
-        self.music = MusicControler()
+        self.myMIDI = MIDIFile(1)
+        self.note = Note(self.out)
+        self.instrument = Instrument(self.out)
+        self.volume = VolumeControler(self.out)
 
     def GetText(self):
-        return self.text
+        return print(self.text)
 
     def GetLen(self):
         return self.text_lenght
@@ -30,12 +37,11 @@ class Text:
             self.SetLen()
             self.ScanText()
 
-    def GetCharWithLen(self, position):
-        return self.text[position]
+    def GetCharWithLen(self, posicao):
+        return self.text[posicao]
 
     def ScanText(self):
         for i in range(0, self.text_lenght):
-            print(i)
             previous_char = self.char
             self.char = self.GetCharWithLen(i)
             if self.char == '+' or self.char == '-':
@@ -45,10 +51,12 @@ class Text:
                     self.CallFunctions(previous_char, i)
             else:
                 self.CallFunctions(previous_char, i)
-        self.music.writeFile()
 
-    def CallFunctions(self, previous_char, i):
-        print(self.char + ' + ' + previous_char)
+        with open("trabalhoFinal.mid", "wb") as output_file:
+            self.MyMIDI.writeFile(output_file)
+
+    def CallFunctions(self, caractere_anterior, i):
+        print(self.char + ' + ' + caractere_anterior)
         #print(self.GetCharWithLen(i) + self.GetCharWithLen(i+1) + self.GetCharWithLen(i+2))
         match self.char:
             case ' ':
@@ -56,27 +64,29 @@ class Text:
                 #self.volume.StopSong()
             case 'A'|'B'|'C'|'D'|'E'|'F'|'G'|'a'|'b'|'c'|'d'|'e'|'f'|'g':
                 #se char = B; checar próximos 3 caracteres para ver se é 'BPM+'
-                self.music.ChangeNote(self.char)
+                self.note.ChangeNote(self.char, self.out) #
             case 'O'|'I'|'U'|'o'|'i'|'u':
-                if previous_char in ['A','B','C','D','E','F','G','a','b','c','d','e','f','g','?']:
-                    self.music.RepeatNote()
+                if caractere_anterior in ['A','B','C','D','E','F','G','a','b','c','d','e','f','g','?']:
+                    self.note.RepeatNote(self.out)
                 else:
-                    self.music.SetInstrument(10)
+                    self.instrument.SetInstrument(124, self.out)
             case '+':
-                self.music.DoubleVolume()
+                self.volume.DoubleVolume(self.out)
             case '-':
-                self.music.DefaultVolume()
+                self.volume.DefaultVolume(self.out)
             case '?':
                 char =  'A' #'self.notes[random.randrange(0,6)]'
-                self.music.ChangeNote(char) #
+                self.note.ChangeNote(char, self.out) #
             case 'R':
                 if self.GetCharWithLen(i+1)=='+':
-                    self.music.RaiseOctave()
+                    self.note.RaiseOctave(self.out)
                 elif self.GetCharWithLen(i+1)=='-':
-                    self.music.LowerOctave()
+                    self.note.LowerOctave(self.out)
             case '\n':
-                self.music.SetInstrument(random.randrange(0,126))
+                self.instrument.SetInstrument(random.randrange(0,126), self.out)
             case ';':
-                self.music.SetVelocity(random.randrange(30,140))
+                self.note.SetVelocity(random.randrange(30,140))
             case _:
-                self.music.DefaultVolume()
+                pass
+        
+        self.MyMIDI.addNote(track, channel, pitch, time + i, duration, volume)
