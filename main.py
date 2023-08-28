@@ -2,6 +2,8 @@ from text import Text
 
 
 text = Text()
-text.ReadTextFromArchive('exemplo1.txt')
+#texto = input("Digite um texto de entrada: ")
+#text.SetText(texto)
+text.SetTextFromArchive('exemplo1.txt')
 
 
