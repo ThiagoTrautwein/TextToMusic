@@ -2,3 +2,7 @@ cdefgab+ texto+ tex to
 BPM+??????
 R+cdef gab;
 R+cde;fgab
+cdefgab+ texto+ tex to
+BPM+??????
+R+cdef gab;
+R+cde;fgab

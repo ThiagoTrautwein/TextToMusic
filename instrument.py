@@ -1,12 +1,14 @@
-class Instrument:
-    code_midi_default = 0
+
+
+class Instrument(): 
 
     def __init__(self):
-        self.codeMIDI = self.code_midi_default
+        self.instrument = 0
 
-    def GetInstrument (self):
-        return self.codeMIDI
+    def __SetInstrument(self, instrument, time, out, MIDI):
+        self.instrument = instrument
+        out.send_message([0xC4, instrument])
+        MIDI.addProgramChange(0, 0, time, instrument)
 
-    def CalculateNewInstrument (self, valor_numerico, out):
-        self.codeMIDI = self.codeMIDI + valor_numerico
-        self.SetInstrument(self.GetInstrument(), out)
+    def ChangeInstrument(self, instrument, time, out, MIDI):
+        self.__SetInstrument(instrument, time, out, MIDI)
